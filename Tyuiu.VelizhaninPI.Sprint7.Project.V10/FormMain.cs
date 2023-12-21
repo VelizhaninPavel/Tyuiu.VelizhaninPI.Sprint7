@@ -26,7 +26,6 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
             DwmSetWindowAttribute(this.Handle, attribute, ref preference, sizeof(uint));
 
             openFileDialogTask_VPI.Filter = "Значения, разделённые запятыми(*.csv)|*.csv|Все файлы(*.*)|*.*";
-            saveFileDialogTask_VPI.Filter = "Значения, разделённые запятыми(*.csv)|*.csv|Все файлы(*.*)|*.";
         }
 
         static int rows;
@@ -111,11 +110,156 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
             toolStripMenuItemSaveFile_VPI.Enabled = true;
             ToolStripMenuItemSaveFile_csv_VPI.Enabled = true;
             ToolStripMenuItemSaveFile_xlsx_VPI.Enabled = true;
+            buttonAddRow_VPI.Enabled = true;
+            buttonRowUpDown_VPI.Enabled = true;
+            radioButtonRowDown_VPI.Enabled = true;
+            radioButtonRowUp_VPI.Enabled = true;
         }
 
         private void ToolStripMenuItemSaveFile_xlsx_VPI_Click(object sender, EventArgs e)
         {
+            saveFileDialogTask_VPI.FileName = "OutPutFileSprint7";
+            saveFileDialogTask_VPI.Filter = "Значения, разделённые запятыми(*.xlsx)|*.xlsx|Все файлы(*.*)|*.";
+            saveFileDialogTask_VPI.FilterIndex = 2;
+            saveFileDialogTask_VPI.RestoreDirectory = true;
+            saveFileDialogTask_VPI.InitialDirectory = Directory.GetCurrentDirectory();
+            saveFileDialogTask_VPI.ShowDialog();
 
+            string path = saveFileDialogTask_VPI.FileName;
+
+            FileInfo fileInfo = new FileInfo(path);
+            bool fileExists = fileInfo.Exists;
+
+            if (fileExists)
+            {
+                File.Delete(path);
+            }
+
+            int rows = dataGridViewDataBase_VPI.RowCount;
+            int columns = dataGridViewDataBase_VPI.ColumnCount;
+
+            string str = "";
+
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    str = str + dataGridViewDataBase_VPI.Rows[i].Cells[j].Value;
+
+                }
+                File.AppendAllText(path, str + Environment.NewLine, Encoding.GetEncoding(1251));
+                str = "";
+            }
+        }
+
+        private void ToolStripMenuItemSaveFile_csv_VPI_Click(object sender, EventArgs e)
+        {
+            saveFileDialogTask_VPI.FileName = "OutPutFileSprint7.csv";
+            saveFileDialogTask_VPI.Filter = "Значения, разделённые запятыми(*.csv)|*.csv|Все файлы(*.*)|*.";
+            saveFileDialogTask_VPI.InitialDirectory = Directory.GetCurrentDirectory();
+            saveFileDialogTask_VPI.ShowDialog();
+
+            string path = saveFileDialogTask_VPI.FileName;
+
+            FileInfo fileInfo = new FileInfo(path);
+            bool fileExists = fileInfo.Exists;
+
+            if (fileExists)
+            {
+                File.Delete(path);
+            }
+
+            int rows = dataGridViewDataBase_VPI.RowCount;
+            int columns = dataGridViewDataBase_VPI.ColumnCount;
+
+            string str = "";
+
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    if (j != columns - 1)
+                    {
+                        str = str + dataGridViewDataBase_VPI.Rows[i].Cells[j].Value + ";";
+                    }
+                    else
+                    {
+                        str = str + dataGridViewDataBase_VPI.Rows[i].Cells[j].Value;
+                    }
+                }
+                File.AppendAllText(path, str + Environment.NewLine, Encoding.GetEncoding(1251));
+                str = "";
+            }
+        }
+
+        private void StripMenuItemAbout_VPI_Click(object sender, EventArgs e)
+        {
+            FormAbout formAbout = new FormAbout();
+            formAbout.ShowDialog();
+        }
+
+        private void StripMenuItemGuide_VPI_Click(object sender, EventArgs e)
+        {
+            FormGuide formGuide = new FormGuide();
+            formGuide.ShowDialog();
+        }
+
+        private void buttonDeleteRow_VPI_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewCell thisCell in dataGridViewDataBase_VPI.SelectedCells)
+            {
+                if (thisCell.Selected)
+                    dataGridViewDataBase_VPI.Rows.RemoveAt(thisCell.RowIndex);
+            }
+        }
+
+        private void buttonAddRow_VPI_Click(object sender, EventArgs e)
+        {
+            dataGridViewDataBase_VPI.Rows.Add();
+            
+        }
+
+        private void buttonRowUpDown_VPI_Click(object sender, EventArgs e)
+        {
+            if (radioButtonRowUp_VPI.Checked == true)
+            {
+                try
+                {
+                    int totalRows = dataGridViewDataBase_VPI.Rows.Count;
+                    // get index of the row for the selected cell
+                    int rowIndex = dataGridViewDataBase_VPI.SelectedCells[0].OwningRow.Index;
+                    if (rowIndex == 0)
+                        return;
+                    // get index of the column for the selected cell
+                    int colIndex = dataGridViewDataBase_VPI.SelectedCells[0].OwningColumn.Index;
+                    DataGridViewRow selectedRow = dataGridViewDataBase_VPI.Rows[rowIndex];
+                    dataGridViewDataBase_VPI.Rows.Remove(selectedRow);
+                    dataGridViewDataBase_VPI.Rows.Insert(rowIndex - 1, selectedRow);
+                    dataGridViewDataBase_VPI.ClearSelection();
+                    dataGridViewDataBase_VPI.Rows[rowIndex - 1].Cells[colIndex].Selected = true;
+                }
+                catch { }
+            }
+
+            if (radioButtonRowDown_VPI.Checked == true)
+            {
+                try
+                {
+                    int totalRows = dataGridViewDataBase_VPI.Rows.Count;
+                    // get index of the row for the selected cell
+                    int rowIndex = dataGridViewDataBase_VPI.SelectedCells[0].OwningRow.Index;
+                    if (rowIndex == totalRows - 1)
+                        return;
+                    // get index of the column for the selected cell
+                    int colIndex = dataGridViewDataBase_VPI.SelectedCells[0].OwningColumn.Index;
+                    DataGridViewRow selectedRow = dataGridViewDataBase_VPI.Rows[rowIndex];
+                    dataGridViewDataBase_VPI.Rows.Remove(selectedRow);
+                    dataGridViewDataBase_VPI.Rows.Insert(rowIndex + 1, selectedRow);
+                    dataGridViewDataBase_VPI.ClearSelection();
+                    dataGridViewDataBase_VPI.Rows[rowIndex + 1].Cells[colIndex].Selected = true;
+                }
+                catch { }
+            }
         }
     }
 }

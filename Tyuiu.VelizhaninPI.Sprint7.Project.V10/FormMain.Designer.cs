@@ -31,6 +31,10 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
         {
             this.components = new System.ComponentModel.Container();
             this.panelMain_VPI = new System.Windows.Forms.Panel();
+            this.buttonRowUpDown_VPI = new System.Windows.Forms.Button();
+            this.radioButtonRowDown_VPI = new System.Windows.Forms.RadioButton();
+            this.radioButtonRowUp_VPI = new System.Windows.Forms.RadioButton();
+            this.buttonAddRow_VPI = new System.Windows.Forms.Button();
             this.buttonDeleteRow_VPI = new System.Windows.Forms.Button();
             this.textBoxSearch_VPI = new System.Windows.Forms.TextBox();
             this.dataGridViewDataBase_VPI = new System.Windows.Forms.DataGridView();
@@ -55,6 +59,10 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
             // panelMain_VPI
             // 
             this.panelMain_VPI.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.panelMain_VPI.Controls.Add(this.buttonRowUpDown_VPI);
+            this.panelMain_VPI.Controls.Add(this.radioButtonRowDown_VPI);
+            this.panelMain_VPI.Controls.Add(this.radioButtonRowUp_VPI);
+            this.panelMain_VPI.Controls.Add(this.buttonAddRow_VPI);
             this.panelMain_VPI.Controls.Add(this.buttonDeleteRow_VPI);
             this.panelMain_VPI.Controls.Add(this.textBoxSearch_VPI);
             this.panelMain_VPI.Controls.Add(this.dataGridViewDataBase_VPI);
@@ -64,15 +72,62 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
             this.panelMain_VPI.Size = new System.Drawing.Size(1203, 570);
             this.panelMain_VPI.TabIndex = 0;
             // 
+            // buttonRowUpDown_VPI
+            // 
+            this.buttonRowUpDown_VPI.Enabled = false;
+            this.buttonRowUpDown_VPI.Location = new System.Drawing.Point(1044, 498);
+            this.buttonRowUpDown_VPI.Name = "buttonRowUpDown_VPI";
+            this.buttonRowUpDown_VPI.Size = new System.Drawing.Size(139, 30);
+            this.buttonRowUpDown_VPI.TabIndex = 8;
+            this.buttonRowUpDown_VPI.Text = "Переместить";
+            this.buttonRowUpDown_VPI.UseVisualStyleBackColor = true;
+            this.buttonRowUpDown_VPI.Click += new System.EventHandler(this.buttonRowUpDown_VPI_Click);
+            // 
+            // radioButtonRowDown_VPI
+            // 
+            this.radioButtonRowDown_VPI.AutoSize = true;
+            this.radioButtonRowDown_VPI.Enabled = false;
+            this.radioButtonRowDown_VPI.Location = new System.Drawing.Point(1124, 539);
+            this.radioButtonRowDown_VPI.Name = "radioButtonRowDown_VPI";
+            this.radioButtonRowDown_VPI.Size = new System.Drawing.Size(59, 21);
+            this.radioButtonRowDown_VPI.TabIndex = 7;
+            this.radioButtonRowDown_VPI.TabStop = true;
+            this.radioButtonRowDown_VPI.Text = "вниз";
+            this.radioButtonRowDown_VPI.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonRowUp_VPI
+            // 
+            this.radioButtonRowUp_VPI.AutoSize = true;
+            this.radioButtonRowUp_VPI.Enabled = false;
+            this.radioButtonRowUp_VPI.Location = new System.Drawing.Point(1044, 539);
+            this.radioButtonRowUp_VPI.Name = "radioButtonRowUp_VPI";
+            this.radioButtonRowUp_VPI.Size = new System.Drawing.Size(65, 21);
+            this.radioButtonRowUp_VPI.TabIndex = 6;
+            this.radioButtonRowUp_VPI.TabStop = true;
+            this.radioButtonRowUp_VPI.Text = "вверх";
+            this.radioButtonRowUp_VPI.UseVisualStyleBackColor = true;
+            // 
+            // buttonAddRow_VPI
+            // 
+            this.buttonAddRow_VPI.Enabled = false;
+            this.buttonAddRow_VPI.Location = new System.Drawing.Point(728, 498);
+            this.buttonAddRow_VPI.Name = "buttonAddRow_VPI";
+            this.buttonAddRow_VPI.Size = new System.Drawing.Size(152, 30);
+            this.buttonAddRow_VPI.TabIndex = 5;
+            this.buttonAddRow_VPI.Text = "Добавить строку";
+            this.buttonAddRow_VPI.UseVisualStyleBackColor = true;
+            this.buttonAddRow_VPI.Click += new System.EventHandler(this.buttonAddRow_VPI_Click);
+            // 
             // buttonDeleteRow_VPI
             // 
             this.buttonDeleteRow_VPI.Enabled = false;
-            this.buttonDeleteRow_VPI.Location = new System.Drawing.Point(1031, 498);
+            this.buttonDeleteRow_VPI.Location = new System.Drawing.Point(886, 498);
             this.buttonDeleteRow_VPI.Name = "buttonDeleteRow_VPI";
-            this.buttonDeleteRow_VPI.Size = new System.Drawing.Size(152, 38);
+            this.buttonDeleteRow_VPI.Size = new System.Drawing.Size(152, 30);
             this.buttonDeleteRow_VPI.TabIndex = 4;
             this.buttonDeleteRow_VPI.Text = "Удалить строку";
             this.buttonDeleteRow_VPI.UseVisualStyleBackColor = true;
+            this.buttonDeleteRow_VPI.Click += new System.EventHandler(this.buttonDeleteRow_VPI_Click);
             // 
             // textBoxSearch_VPI
             // 
@@ -85,6 +140,8 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
             // 
             // dataGridViewDataBase_VPI
             // 
+            this.dataGridViewDataBase_VPI.AllowUserToAddRows = false;
+            this.dataGridViewDataBase_VPI.AllowUserToDeleteRows = false;
             this.dataGridViewDataBase_VPI.BackgroundColor = System.Drawing.Color.Gainsboro;
             this.dataGridViewDataBase_VPI.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewDataBase_VPI.ColumnHeadersVisible = false;
@@ -99,7 +156,8 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
             // labelSearch_VPI
             // 
             this.labelSearch_VPI.AutoSize = true;
-            this.labelSearch_VPI.Location = new System.Drawing.Point(12, 498);
+            this.labelSearch_VPI.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.labelSearch_VPI.Location = new System.Drawing.Point(12, 501);
             this.labelSearch_VPI.Name = "labelSearch_VPI";
             this.labelSearch_VPI.Size = new System.Drawing.Size(52, 17);
             this.labelSearch_VPI.TabIndex = 2;
@@ -115,7 +173,7 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
             this.StripMenuItemAbout_VPI});
             this.menuStripButtons_VPI.Location = new System.Drawing.Point(0, 0);
             this.menuStripButtons_VPI.Name = "menuStripButtons_VPI";
-            this.menuStripButtons_VPI.Size = new System.Drawing.Size(1227, 28);
+            this.menuStripButtons_VPI.Size = new System.Drawing.Size(1227, 30);
             this.menuStripButtons_VPI.TabIndex = 1;
             this.menuStripButtons_VPI.Text = "menuStrip1";
             // 
@@ -132,7 +190,7 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
             // toolStripMenuItemOpenFile_VPI
             // 
             this.toolStripMenuItemOpenFile_VPI.Name = "toolStripMenuItemOpenFile_VPI";
-            this.toolStripMenuItemOpenFile_VPI.Size = new System.Drawing.Size(224, 26);
+            this.toolStripMenuItemOpenFile_VPI.Size = new System.Drawing.Size(205, 26);
             this.toolStripMenuItemOpenFile_VPI.Text = "Открыть файл";
             this.toolStripMenuItemOpenFile_VPI.Click += new System.EventHandler(this.toolStripMenuItemOpenFile_Click);
             // 
@@ -143,7 +201,7 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
             this.ToolStripMenuItemSaveFile_xlsx_VPI});
             this.toolStripMenuItemSaveFile_VPI.Enabled = false;
             this.toolStripMenuItemSaveFile_VPI.Name = "toolStripMenuItemSaveFile_VPI";
-            this.toolStripMenuItemSaveFile_VPI.Size = new System.Drawing.Size(224, 26);
+            this.toolStripMenuItemSaveFile_VPI.Size = new System.Drawing.Size(205, 26);
             this.toolStripMenuItemSaveFile_VPI.Text = "Сохранить файл";
             // 
             // ToolStripMenuItemSaveFile_csv_VPI
@@ -152,6 +210,7 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
             this.ToolStripMenuItemSaveFile_csv_VPI.Name = "ToolStripMenuItemSaveFile_csv_VPI";
             this.ToolStripMenuItemSaveFile_csv_VPI.Size = new System.Drawing.Size(193, 26);
             this.ToolStripMenuItemSaveFile_csv_VPI.Text = "в формате csv";
+            this.ToolStripMenuItemSaveFile_csv_VPI.Click += new System.EventHandler(this.ToolStripMenuItemSaveFile_csv_VPI_Click);
             // 
             // ToolStripMenuItemSaveFile_xlsx_VPI
             // 
@@ -172,12 +231,14 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
             this.StripMenuItemGuide_VPI.Name = "StripMenuItemGuide_VPI";
             this.StripMenuItemGuide_VPI.Size = new System.Drawing.Size(209, 24);
             this.StripMenuItemGuide_VPI.Text = "Руководство пользователя";
+            this.StripMenuItemGuide_VPI.Click += new System.EventHandler(this.StripMenuItemGuide_VPI_Click);
             // 
             // StripMenuItemAbout_VPI
             // 
             this.StripMenuItemAbout_VPI.Name = "StripMenuItemAbout_VPI";
             this.StripMenuItemAbout_VPI.Size = new System.Drawing.Size(118, 24);
             this.StripMenuItemAbout_VPI.Text = "О программе";
+            this.StripMenuItemAbout_VPI.Click += new System.EventHandler(this.StripMenuItemAbout_VPI_Click);
             // 
             // openFileDialogTask_VPI
             // 
@@ -225,6 +286,10 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
         private System.Windows.Forms.OpenFileDialog openFileDialogTask_VPI;
         private System.Windows.Forms.ToolTip toolTipTask_VPI;
         private System.Windows.Forms.SaveFileDialog saveFileDialogTask_VPI;
+        private System.Windows.Forms.Button buttonAddRow_VPI;
+        private System.Windows.Forms.Button buttonRowUpDown_VPI;
+        private System.Windows.Forms.RadioButton radioButtonRowDown_VPI;
+        private System.Windows.Forms.RadioButton radioButtonRowUp_VPI;
     }
 }
 
