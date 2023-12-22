@@ -97,14 +97,22 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
                 dataGridViewDataBase_VPI.Columns[i].Width = 75;
 
             }
+            dataGridViewDataBase_VPI.Columns[9].Width = 90;
+            dataGridViewDataBase_VPI.Columns[5].Width = 89;
 
             for (int r = 0; r < rows; r++)
             {
                 for (int c = 0; c < columns; c++)
                 {
                     dataGridViewDataBase_VPI.Rows[r].Cells[c].Value = arrayValues[r, c];
+                    if (r == 0)
+                    {
+                        dataGridViewDataBase_VPI.Columns[c].HeaderText = arrayValues[0, c];
+                    }
                 }
             }
+            dataGridViewDataBase_VPI.Rows.RemoveAt(0);
+
             textBoxSearch_VPI.Enabled = true;
             buttonDeleteRow_VPI.Enabled = true;
             toolStripMenuItemSaveFile_VPI.Enabled = true;
@@ -114,6 +122,7 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
             buttonRowUpDown_VPI.Enabled = true;
             radioButtonRowDown_VPI.Enabled = true;
             radioButtonRowUp_VPI.Enabled = true;
+            buttonSearch_VPI.Enabled = true;
         }
 
         private void ToolStripMenuItemSaveFile_xlsx_VPI_Click(object sender, EventArgs e)
@@ -215,8 +224,13 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
 
         private void buttonAddRow_VPI_Click(object sender, EventArgs e)
         {
-            dataGridViewDataBase_VPI.Rows.Add();
-            
+            foreach (DataGridViewCell thisCell in dataGridViewDataBase_VPI.SelectedCells)
+            {
+                if (thisCell.Selected)
+                    dataGridViewDataBase_VPI.Rows.Insert(thisCell.RowIndex + 1);
+            }
+
+
         }
 
         private void buttonRowUpDown_VPI_Click(object sender, EventArgs e)
@@ -260,6 +274,46 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
                 }
                 catch { }
             }
+        }
+
+        class DoubleBufferedDataGridView : DataGridView
+        {
+            protected override bool DoubleBuffered { get => true; }
+        }
+
+        private void buttonSearch_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < dataGridViewDataBase_VPI.RowCount; i++)
+            {
+                dataGridViewDataBase_VPI.Rows[i].Selected = false;
+                for (int j = 0; j < dataGridViewDataBase_VPI.ColumnCount; j++)
+                    if (dataGridViewDataBase_VPI.Rows[i].Cells[j].Value != null)
+                        if (dataGridViewDataBase_VPI.Rows[i].Cells[j].Value.ToString().Contains(textBoxSearch_VPI.Text))
+                        {
+                            dataGridViewDataBase_VPI.Rows[i].Selected = true;
+                            break;
+                        }
+            }
+        }
+
+        private void buttonOpen_MouseEnter(object sender, EventArgs e)
+        {
+            toolTipTask_VPI.ToolTipTitle = "Открыть файл";
+        }
+
+        private void buttonDone_MouseEnter(object sender, EventArgs e)
+        {
+            toolTipTask_VPI.ToolTipTitle = "Выполнить";
+        }
+
+        private void buttonSave_MouseEnter(object sender, EventArgs e)
+        {
+            toolTipTask_VPI.ToolTipTitle = "Сохранить в файл";
+        }
+
+        private void buttonAbout_MouseEnter(object sender, EventArgs e)
+        {
+            toolTipTask_VPI.ToolTipTitle = "Справка";
         }
     }
 }
