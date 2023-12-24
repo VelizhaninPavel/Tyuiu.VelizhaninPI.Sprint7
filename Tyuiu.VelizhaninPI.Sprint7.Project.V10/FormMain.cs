@@ -34,6 +34,10 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
 
         DataService ds = new DataService();
 
+        class DoubleBufferedDataGridView : DataGridView
+        {
+            protected override bool DoubleBuffered { get => true; }
+        }
         public partial class Form1 : Form
         {
             public enum
@@ -80,6 +84,27 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
             }
             return arrayValues;
         }
+        public static string[] LoadFromFileHeaders(string filePath)
+        {
+            string fileData = File.ReadAllText(filePath, Encoding.GetEncoding(1251));
+
+            fileData = fileData.Replace('\n', '\r');
+            string[] lines = fileData.Split(new char[] { '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            columns = lines[0].Split(';').Length;
+
+            string[] arrayHeaderValues = new string[columns];
+            for (int i = 0; i < 1; i++)
+            {
+                string[] line_r = lines[i].Split(';');
+                for (int j = 0; j < columns; j++)
+                {
+                    arrayHeaderValues[j] = line_r[j];
+                }
+            }
+            return arrayHeaderValues;
+        }
+
+
         private void toolStripMenuItemOpenFile_Click(object sender, EventArgs e)
         {
             openFileDialogTask_VPI.ShowDialog();
@@ -123,6 +148,7 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
             radioButtonRowDown_VPI.Enabled = true;
             radioButtonRowUp_VPI.Enabled = true;
             buttonSearch_VPI.Enabled = true;
+            StripMenuItemStatistics_VPI.Enabled = true;
         }
 
         private void ToolStripMenuItemSaveFile_xlsx_VPI_Click(object sender, EventArgs e)
@@ -218,19 +244,48 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
             foreach (DataGridViewCell thisCell in dataGridViewDataBase_VPI.SelectedCells)
             {
                 if (thisCell.Selected)
-                    dataGridViewDataBase_VPI.Rows.RemoveAt(thisCell.RowIndex);
+                {
+                    var question = MessageBox.Show("Вы действительно хотите удалить выделенную строку?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (question == DialogResult.Yes)
+                    {
+                        dataGridViewDataBase_VPI.Rows.RemoveAt(thisCell.RowIndex);
+                    }
+                    else if (question == DialogResult.No)
+                    {
+                        break;
+                    }
+                }
+                /*else if (thisCell.Selected == false)
+                {
+                    MessageBox.Show("Сначала выделите строку", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }*/
             }
         }
 
         private void buttonAddRow_VPI_Click(object sender, EventArgs e)
         {
+            /*FormOrder formOrder = new FormOrder();
+            formOrder.Show();
+            dataGridViewDataBase_VPI.Rows.Insert(dataGridViewDataBase_VPI.SelectedCells[0].OwningColumn.Index + 1);
+            dataGridViewDataBase_VPI.Rows[dataGridViewDataBase_VPI.SelectedCells[0].OwningColumn.Index + 1].Cells[0].Value = OrderData.textBoxOrder0;
+            dataGridViewDataBase_VPI.Rows[dataGridViewDataBase_VPI.SelectedCells[0].OwningColumn.Index + 1].Cells[1].Value = OrderData.textBoxOrder1;
+            dataGridViewDataBase_VPI.Rows[dataGridViewDataBase_VPI.SelectedCells[0].OwningColumn.Index + 1].Cells[2].Value = OrderData.textBoxOrder2;
+            dataGridViewDataBase_VPI.Rows[dataGridViewDataBase_VPI.SelectedCells[0].OwningColumn.Index + 1].Cells[3].Value = OrderData.textBoxOrder3;
+            dataGridViewDataBase_VPI.Rows[dataGridViewDataBase_VPI.SelectedCells[0].OwningColumn.Index + 1].Cells[4].Value = OrderData.textBoxOrder4;
+            dataGridViewDataBase_VPI.Rows[dataGridViewDataBase_VPI.SelectedCells[0].OwningColumn.Index + 1].Cells[5].Value = OrderData.textBoxOrder5;
+            dataGridViewDataBase_VPI.Rows[dataGridViewDataBase_VPI.SelectedCells[0].OwningColumn.Index + 1].Cells[6].Value = OrderData.textBoxOrder6;
+            dataGridViewDataBase_VPI.Rows[dataGridViewDataBase_VPI.SelectedCells[0].OwningColumn.Index + 1].Cells[7].Value = OrderData.textBoxOrder7;
+            dataGridViewDataBase_VPI.Rows[dataGridViewDataBase_VPI.SelectedCells[0].OwningColumn.Index + 1].Cells[8].Value = OrderData.textBoxOrder8;
+            dataGridViewDataBase_VPI.Rows[dataGridViewDataBase_VPI.SelectedCells[0].OwningColumn.Index + 1].Cells[9].Value = OrderData.textBoxOrder9;
+            dataGridViewDataBase_VPI.Rows[dataGridViewDataBase_VPI.SelectedCells[0].OwningColumn.Index + 1].Cells[10].Value = OrderData.textBoxOrder10;*/
             foreach (DataGridViewCell thisCell in dataGridViewDataBase_VPI.SelectedCells)
             {
                 if (thisCell.Selected)
+                {
                     dataGridViewDataBase_VPI.Rows.Insert(thisCell.RowIndex + 1);
+
+                }
             }
-
-
         }
 
         private void buttonRowUpDown_VPI_Click(object sender, EventArgs e)
@@ -276,44 +331,74 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
             }
         }
 
-        class DoubleBufferedDataGridView : DataGridView
-        {
-            protected override bool DoubleBuffered { get => true; }
-        }
 
         private void buttonSearch_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < dataGridViewDataBase_VPI.RowCount; i++)
             {
+                dataGridViewDataBase_VPI.Rows[i].Visible = true;
+            }
+            for (int i = 0; i < dataGridViewDataBase_VPI.RowCount; i++)
+            {
                 dataGridViewDataBase_VPI.Rows[i].Selected = false;
+                dataGridViewDataBase_VPI.Rows[i].Visible = false;
                 for (int j = 0; j < dataGridViewDataBase_VPI.ColumnCount; j++)
                     if (dataGridViewDataBase_VPI.Rows[i].Cells[j].Value != null)
                         if (dataGridViewDataBase_VPI.Rows[i].Cells[j].Value.ToString().Contains(textBoxSearch_VPI.Text))
                         {
                             dataGridViewDataBase_VPI.Rows[i].Selected = true;
+                            dataGridViewDataBase_VPI.Rows[i].Visible = true;
                             break;
                         }
             }
+            buttonSearchRemove_VPI.Enabled = true;
         }
 
-        private void buttonOpen_MouseEnter(object sender, EventArgs e)
+        private void buttonSearchBack_VPI_Click(object sender, EventArgs e)
         {
-            toolTipTask_VPI.ToolTipTitle = "Открыть файл";
+            for (int i = 0; i < dataGridViewDataBase_VPI.RowCount; i++)
+            {
+                dataGridViewDataBase_VPI.Rows[i].Visible = true;
+            }
+                buttonSearchRemove_VPI.Enabled = false;
         }
-
-        private void buttonDone_MouseEnter(object sender, EventArgs e)
+        private void StripMenuItemStatistics_VPI_Click(object sender, EventArgs e)
         {
-            toolTipTask_VPI.ToolTipTitle = "Выполнить";
-        }
+            string path = $@"{Directory.GetCurrentDirectory()}\dataGridViewDataBase_VPI_copy.csv";
 
-        private void buttonSave_MouseEnter(object sender, EventArgs e)
-        {
-            toolTipTask_VPI.ToolTipTitle = "Сохранить в файл";
-        }
+            FileInfo fileInfo = new FileInfo(path);
+            bool fileExists = fileInfo.Exists;
 
-        private void buttonAbout_MouseEnter(object sender, EventArgs e)
-        {
-            toolTipTask_VPI.ToolTipTitle = "Справка";
+            if (fileExists)
+            {
+                File.Delete(path);
+            }
+
+            int rows = dataGridViewDataBase_VPI.RowCount;
+            int columns = dataGridViewDataBase_VPI.ColumnCount;
+
+            string str = "";
+
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    if (j != columns - 1)
+                    {
+                        str = str + dataGridViewDataBase_VPI.Rows[i].Cells[j].Value + ";";
+                    }
+                    else
+                    {
+                        str = str + dataGridViewDataBase_VPI.Rows[i].Cells[j].Value;
+                    }
+                }
+                File.AppendAllText(path, str + Environment.NewLine, Encoding.GetEncoding(1251));
+                str = "";
+            }
+            string[] arrayHeaderValues = new string[columns];
+            OrderData.arrayHeaderValues = LoadFromFileHeaders(openFilePath);
+            FormStatistics formStatistics = new FormStatistics();
+            formStatistics.Show();
         }
     }
 }
