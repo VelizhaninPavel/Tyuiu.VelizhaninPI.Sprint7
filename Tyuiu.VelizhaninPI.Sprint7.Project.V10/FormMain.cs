@@ -142,49 +142,12 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
             buttonDeleteRow_VPI.Enabled = true;
             toolStripMenuItemSaveFile_VPI.Enabled = true;
             ToolStripMenuItemSaveFile_csv_VPI.Enabled = true;
-            ToolStripMenuItemSaveFile_xlsx_VPI.Enabled = true;
             buttonAddRow_VPI.Enabled = true;
             buttonRowUpDown_VPI.Enabled = true;
             radioButtonRowDown_VPI.Enabled = true;
             radioButtonRowUp_VPI.Enabled = true;
             buttonSearch_VPI.Enabled = true;
             StripMenuItemStatistics_VPI.Enabled = true;
-        }
-
-        private void ToolStripMenuItemSaveFile_xlsx_VPI_Click(object sender, EventArgs e)
-        {
-            saveFileDialogTask_VPI.FileName = "OutPutFileSprint7";
-            saveFileDialogTask_VPI.Filter = "Значения, разделённые запятыми(*.xlsx)|*.xlsx|Все файлы(*.*)|*.";
-            saveFileDialogTask_VPI.FilterIndex = 2;
-            saveFileDialogTask_VPI.RestoreDirectory = true;
-            saveFileDialogTask_VPI.InitialDirectory = Directory.GetCurrentDirectory();
-            saveFileDialogTask_VPI.ShowDialog();
-
-            string path = saveFileDialogTask_VPI.FileName;
-
-            FileInfo fileInfo = new FileInfo(path);
-            bool fileExists = fileInfo.Exists;
-
-            if (fileExists)
-            {
-                File.Delete(path);
-            }
-
-            int rows = dataGridViewDataBase_VPI.RowCount;
-            int columns = dataGridViewDataBase_VPI.ColumnCount;
-
-            string str = "";
-
-            for (int i = 0; i < rows; i++)
-            {
-                for (int j = 0; j < columns; j++)
-                {
-                    str = str + dataGridViewDataBase_VPI.Rows[i].Cells[j].Value;
-
-                }
-                File.AppendAllText(path, str + Environment.NewLine, Encoding.GetEncoding(1251));
-                str = "";
-            }
         }
 
         private void ToolStripMenuItemSaveFile_csv_VPI_Click(object sender, EventArgs e)
@@ -329,29 +292,41 @@ namespace Tyuiu.VelizhaninPI.Sprint7.Project.V10
                 }
                 catch { }
             }
+
+            if (radioButtonRowDown_VPI.Checked == false && radioButtonRowUp_VPI.Checked == false)
+            {
+                MessageBox.Show("Сначала выберите направление перемещения строки.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 
         private void buttonSearch_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < dataGridViewDataBase_VPI.RowCount; i++)
+            if (textBoxSearch_VPI.Text != "")
             {
-                dataGridViewDataBase_VPI.Rows[i].Visible = true;
+                for (int i = 0; i < dataGridViewDataBase_VPI.RowCount; i++)
+                {
+                    dataGridViewDataBase_VPI.Rows[i].Visible = true;
+                }
+                for (int i = 0; i < dataGridViewDataBase_VPI.RowCount; i++)
+                {
+                    dataGridViewDataBase_VPI.Rows[i].Selected = false;
+                    dataGridViewDataBase_VPI.Rows[i].Visible = false;
+                    for (int j = 0; j < dataGridViewDataBase_VPI.ColumnCount; j++)
+                        if (dataGridViewDataBase_VPI.Rows[i].Cells[j].Value != null)
+                            if (dataGridViewDataBase_VPI.Rows[i].Cells[j].Value.ToString().Contains(textBoxSearch_VPI.Text))
+                            {
+                                dataGridViewDataBase_VPI.Rows[i].Selected = true;
+                                dataGridViewDataBase_VPI.Rows[i].Visible = true;
+                                break;
+                            }
+                }
+                buttonSearchRemove_VPI.Enabled = true;
             }
-            for (int i = 0; i < dataGridViewDataBase_VPI.RowCount; i++)
+            else
             {
-                dataGridViewDataBase_VPI.Rows[i].Selected = false;
-                dataGridViewDataBase_VPI.Rows[i].Visible = false;
-                for (int j = 0; j < dataGridViewDataBase_VPI.ColumnCount; j++)
-                    if (dataGridViewDataBase_VPI.Rows[i].Cells[j].Value != null)
-                        if (dataGridViewDataBase_VPI.Rows[i].Cells[j].Value.ToString().Contains(textBoxSearch_VPI.Text))
-                        {
-                            dataGridViewDataBase_VPI.Rows[i].Selected = true;
-                            dataGridViewDataBase_VPI.Rows[i].Visible = true;
-                            break;
-                        }
+                MessageBox.Show("Сначала введите текст.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            buttonSearchRemove_VPI.Enabled = true;
         }
 
         private void buttonSearchBack_VPI_Click(object sender, EventArgs e)
